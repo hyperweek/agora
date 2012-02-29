@@ -2,6 +2,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
+from django.utils.translation import ugettext as _
 
 try:
     from django.contrib import messages
@@ -138,13 +139,13 @@ def post_create(request, forum_id, thread_form_class=ThreadForm):
     forum = get_object_or_404(Forum, id=forum_id)
     
     if forum.closed:
-        messages.error(request, "This forum is closed.")
+        messages.error(request, _("This forum is closed."))
         return HttpResponseRedirect(reverse("agora_forum", args=[forum.id]))
     
     can_create_thread = request.user.has_perm("agora.add_forumthread")
     
     if not can_create_thread:
-        messages.error(request, "You do not have permission to create a thread.")
+        messages.error(request, _("You do not have permission to create a thread."))
         return HttpResponseRedirect(reverse("agora_forum", args=[forum.id]))
     
     if request.method == "POST":
@@ -182,13 +183,13 @@ def reply_create(request, thread_id, reply_form_class=ReplyForm):
     thread = get_object_or_404(ForumThread, id=thread_id)
     
     if thread.closed:
-        messages.error(request, "This thread is closed.")
+        messages.error(request, _("This thread is closed."))
         return HttpResponseRedirect(reverse("agora_thread", args=[thread.id]))
     
     can_create_reply = request.user.has_perm("agora.add_forumreply")
     
     if not can_create_reply:
-        messages.error(request, "You do not have permission to reply to this thread.")
+        messages.error(request, _("You do not have permission to reply to this thread."))
         return HttpResponseRedirect(reverse("agora_thread", args=[thread.id]))
     
     if request.method == "POST":
