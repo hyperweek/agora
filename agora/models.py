@@ -41,6 +41,10 @@ class ForumCategory(models.Model):
     def forums(self):
         return self.forum_set.order_by("title")
 
+    def delete(self):
+        self.forum_set.clear()
+        super(ForumCategory, self).delete()
+
 
 class Forum(models.Model):
     
@@ -56,8 +60,7 @@ class Forum(models.Model):
     )
     category = models.ForeignKey(ForumCategory,
         null = True,
-        blank = True,
-        on_delete = models.SET_NULL
+        blank = True
     )
     
     # @@@ make group-aware
@@ -70,7 +73,6 @@ class Forum(models.Model):
         "ForumThread",
         null = True,
         editable = False,
-        on_delete = models.SET_NULL,
         related_name = "+"
     )
     
@@ -238,7 +240,8 @@ class Forum(models.Model):
 
 class ForumPost(models.Model):
     
-    author = models.ForeignKey(User, related_name="%(app_label)s_%(class)s_related")
+    #author = models.ForeignKey(User, related_name="%(app_label)s_%(class)s_related")
+    author = models.ForeignKey(User)
     content = models.TextField()
     content_html = models.TextField()
     created = models.DateTimeField(default=datetime.datetime.now, editable=False)
@@ -275,8 +278,7 @@ class ForumThread(ForumPost):
     last_reply = models.ForeignKey(
         "ForumReply",
         null = True,
-        editable = False,
-        on_delete = models.SET_NULL
+        editable = False
     )
     
     sticky = models.IntegerField(default=0)
@@ -353,6 +355,10 @@ class ForumThread(ForumPost):
     def thread(self):
         return self
 
+    def delete(self):
+        self.forum_set.clear()
+        super(ForumThread, self).delete()
+
 
 class ForumReply(ForumPost):
     
@@ -364,6 +370,10 @@ class ForumReply(ForumPost):
     class Meta:
         verbose_name = "forum reply"
         verbose_name_plural = "forum replies"
+
+    def delete(self):
+        self.forumthread_set.clear()
+        super(ForumThread, self).delete()
 
 
 class UserPostCount(models.Model):

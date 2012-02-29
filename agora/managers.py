@@ -24,7 +24,7 @@ class ForumThreadManager(models.Manager):
     
     def posts(self, thread, reverse=False):
         from agora.models import ForumReply
-        queryset = ForumThreadPostQuerySet(ForumReply, using=self._db)
+        queryset = ForumThreadPostQuerySet(ForumReply)
         queryset._posts_manager_params = {
             "reverse": reverse,
             "thread": thread,

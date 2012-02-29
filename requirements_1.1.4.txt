@@ -1,0 +1,4 @@
+# tested environment
+Django==1.1.4
+MySQL-python==1.2.3
+-e git+git://github.com/mikexstudios/django-messages-framework.git@master#egg=django-messages-framework
