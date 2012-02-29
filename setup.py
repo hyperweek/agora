@@ -1,5 +1,5 @@
 from distutils.core import setup
-
+from setuptools import find_packages
 
 setup(
     name = "agora",
@@ -10,9 +10,7 @@ setup(
     long_description = open("README.rst").read(),
     license = "BSD",
     url = "http://github.com/eldarion/agora",
-    packages = [
-        "agora",
-    ],
+    packages = find_packages(),
     classifiers = [
         "Development Status :: 3 - Alpha",
         "Environment :: Web Environment",
