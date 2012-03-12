@@ -356,7 +356,9 @@ class ForumThread(ForumPost):
         return self
 
     def delete(self):
-        self.forum_set.clear()
+        if (self.forum.last_thread == self):
+            self.forum.last_thread = None
+            self.forum.save()
         super(ForumThread, self).delete()
 
 
@@ -373,7 +375,9 @@ class ForumReply(ForumPost):
 
     def delete(self):
         self.forumthread_set.clear()
-        super(ForumThread, self).delete()
+        if (self.thread):
+            self.thread.update_reply_count()
+        super(ForumReply, self).delete()
 
 
 class UserPostCount(models.Model):
