@@ -375,8 +375,6 @@ class ForumReply(ForumPost):
 
     def delete(self):
         self.forumthread_set.clear()
-        if (self.thread):
-            self.thread.update_reply_count()
         super(ForumReply, self).delete()
 
 
