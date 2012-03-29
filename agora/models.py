@@ -374,6 +374,14 @@ class ForumReply(ForumPost):
         verbose_name_plural = "forum replies"
 
     def delete(self):
+        if self.thread.last_reply == self:
+            replies = self.thread.replies.all()
+            replies_len = len(replies)
+            if replies_len < 2:
+                self.thread.last_reply = None
+            else:
+                self.thread.last_reply = replies[replies_len - 2]
+            self.thread.save()
         self.forumthread_set.clear()
         super(ForumReply, self).delete()
 
